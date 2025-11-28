@@ -1,0 +1,21 @@
+{
+  "name": "card-reading-system",
+  "version": "1.0.0",
+  "description": "Card reading system for azerpost",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "build": "pkg . --targets node18-win-x64 --output SmartCardReader.exe",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.11",
+    "pcsclite": "^1.0.1"
+  }
+}
