@@ -17,8 +17,6 @@ pcsc.on("reader", reader => {
 
         // Kart daxil oldu
         if (changes & reader.SCARD_STATE_PRESENT && status.state & reader.SCARD_STATE_PRESENT) {
-            console.log("Card Inserted");
-
             reader.connect({ share_mode: reader.SCARD_SHARE_SHARED }, (err, protocol) => {
                 if (err) return console.error("Connect error:", err);
 
@@ -28,7 +26,6 @@ pcsc.on("reader", reader => {
                 reader.transmit(cmd, 40, protocol, (err, data) => {
                     if (!err) {
                         lastUID = data.toString("hex").toUpperCase();
-                        console.log("Card UID:", lastUID);
                     }
                 });
 
@@ -39,7 +36,6 @@ pcsc.on("reader", reader => {
 
         // Kart çıxarıldı
         if (changes & reader.SCARD_STATE_EMPTY && status.state & reader.SCARD_STATE_EMPTY) {
-            console.log("Card removed");
             lastUID = null;
         }
     });
