@@ -1,0 +1,28 @@
+{
+  "info": {
+    "name": "Card Reader Local API",
+    "_postman_id": "d2c5e7a1-4f76-4f7b-8f1b-9f9cb24a1a11",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Card Data",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4121/card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4121",
+          "path": ["card"]
+        }
+      }
+    }
+  ]
+}

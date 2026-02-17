@@ -11,7 +11,6 @@ let lastATR = null;
 const pcsc = pcsclite();
 
 pcsc.on("reader", reader => {
-    console.log("Reader connected:", reader.name);
 
     reader.on("status", status => {
         const changes = reader.state ^ status.state;

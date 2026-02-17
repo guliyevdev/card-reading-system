@@ -1,0 +1,2 @@
+curl --request GET "http://localhost:4121/card" \\
+  --header "Accept: application/json"
