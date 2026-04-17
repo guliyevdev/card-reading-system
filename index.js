@@ -10,21 +10,37 @@ let lastATR = null;
 
 const nfc = new NFC();
 
+async function readUid(reader) {
+    const cmd = Buffer.from("FFCA000000", "hex");
+    const response = await reader.transmit(cmd, 12);
+
+    if (!response || response.length < 2) {
+        throw new Error(`Invalid UID response length: ${response ? response.length : 0}`);
+    }
+
+    const statusCode = response.slice(-2).readUInt16BE(0);
+    if (statusCode !== 0x9000) {
+        throw new Error(`Could not get card UID. Status=0x${statusCode.toString(16).toUpperCase()}`);
+    }
+
+    return response.slice(0, -2).toString("hex").toUpperCase();
+}
+
 nfc.on("reader", reader => {
     console.log(`Reader detected: ${reader.name}`);
+    reader.autoProcessing = false;
 
-    reader.on("card", card => {
+    reader.on("card", async card => {
         try {
-            // UID comes directly from nfc-pcsc
-            lastUID = card.uid ? card.uid.toUpperCase() : null;
-
-            // ATR (if available)
             lastATR = card.atr
                 ? card.atr.toString("hex").toUpperCase()
                 : null;
 
-            console.log(`Card detected. UID=${lastUID}, ATR=${lastATR}`);
+            lastUID = await readUid(reader);
+
+            console.log(`Card detected. UID=${lastUID}, ATR=${lastATR}, standard=${card.standard || "unknown"}`);
         } catch (err) {
+            lastUID = null;
             console.error("Card processing error:", err.message || err);
         }
     });
