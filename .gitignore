@@ -1,58 +1,16 @@
-
 # Logs
-logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Dependency directories
-node_modules/
-jspm_packages/
 
 # Build outputs
+bin/
 dist/
 build/
-lib/
-.next/
-.nuxt/
-.output/
 out/
+*.exe
 
-# TypeScript cache
-*.tsbuildinfo
-
-# Testing
+# Coverage and temp files
 coverage/
-.nyc_output
-cypress/videos/
-cypress/screenshots/
-playwright-report/
 .cache/
-
-# Env files
-.env
-.env.*
-!.env.example
-
-# Node version managers
-.nvmrc
-.node-version
-
-# Package managers
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-pnpm-workspace.yaml
-shrinkwrap.yaml
 
 # Editors and IDEs
 .vscode/
@@ -60,11 +18,3 @@ shrinkwrap.yaml
 .DS_Store
 *.swp
 *.swo
-
-# Misc
-.eslintcache
-.parcel-cache
-.turbo
-.npm
-.yarn
-.pnp.*
