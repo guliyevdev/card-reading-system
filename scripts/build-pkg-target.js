@@ -7,6 +7,8 @@ const TARGET_NODE_VERSIONS = {
     node18: "18.5.0"
 };
 
+const PKG_SUPPORTED_RUNTIMES = Object.keys(TARGET_NODE_VERSIONS);
+
 const [, , target, output] = process.argv;
 
 if (!target || !output) {
@@ -24,7 +26,13 @@ const [, runtime, targetPlatform, targetArch] = targetMatch;
 const nodeVersion = TARGET_NODE_VERSIONS[runtime];
 
 if (!nodeVersion) {
-    console.error(`No native rebuild mapping configured for runtime ${runtime}`);
+    console.error(
+        [
+            `Unsupported runtime ${runtime}.`,
+            `This project currently builds with pkg-supported runtimes: ${PKG_SUPPORTED_RUNTIMES.join(", ")}.`,
+            "pkg@5.8.1 does not provide a node24 base binary."
+        ].join(" ")
+    );
     process.exit(1);
 }
 

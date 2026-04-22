@@ -8,9 +8,9 @@
     "dev": "nodemon index.js",
     "start": "node index.js",
     "build": "npm run build:win",
-    "build:win": "node scripts/build-pkg-target.js node24-win-x64 dist/SmartCardReader-win-x64.exe",
+    "build:win": "node scripts/build-pkg-target.js node18-win-x64 dist/SmartCardReader-win-x64.exe",
     "build:mac:intel": "node scripts/build-pkg-target.js node18-macos-x64 dist/SmartCardReader-macos-x64",
-    "build:mac:arm": "node scripts/build-pkg-target.js node24-macos-arm64 dist/SmartCardReader-macos-arm64",
+    "build:mac:arm": "node scripts/build-pkg-target.js node18-macos-arm64 dist/SmartCardReader-macos-arm64",
     "build:all": "npm run build:win && npm run build:mac:intel && npm run build:mac:arm",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
