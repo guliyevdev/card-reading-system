@@ -2,6 +2,8 @@
 
 Local smart card service written in Go. It exposes the current card state over HTTP on `http://localhost:4121/card`.
 
+Running the built binary directly starts it in background mode by default.
+
 ## Requirements
 
 - Go 1.26 or newer
@@ -17,8 +19,20 @@ make run
 Or directly:
 
 ```bash
-go run ./cmd/card-reader
+go run ./cmd/card-reader serve
 ```
+
+Background mode:
+
+```bash
+make start
+make status
+make stop
+```
+
+Logs and PID file are written into `runtime/`.
+
+If you open the built binary by double-clicking it, it will detach and continue running in background. Use `make status` to check it and `make stop` to stop it.
 
 ## Build
 

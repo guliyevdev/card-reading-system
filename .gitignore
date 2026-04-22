@@ -7,6 +7,7 @@ dist/
 build/
 out/
 *.exe
+runtime/
 
 # Coverage and temp files
 coverage/

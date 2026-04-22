@@ -4,7 +4,16 @@ BIN_DIR := bin
 .PHONY: run build build-mac-arm64 build-win-x64 test clean
 
 run:
-	go run ./cmd/card-reader
+	go run ./cmd/card-reader serve
+
+start: build
+	./$(BIN_DIR)/$(APP_NAME) start
+
+stop: build
+	./$(BIN_DIR)/$(APP_NAME) stop
+
+status: build
+	./$(BIN_DIR)/$(APP_NAME) status
 
 build:
 	mkdir -p $(BIN_DIR)
