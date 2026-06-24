@@ -1,7 +1,7 @@
 APP_NAME := smart-card-reader
 BIN_DIR := bin
 
-.PHONY: run build build-mac-arm64 build-win-x64 test clean
+.PHONY: run start stop status startup-on startup-off startup-status build build-mac-arm64 build-win-x64 test clean
 
 run:
 	go run ./cmd/card-reader serve
@@ -14,6 +14,15 @@ stop: build
 
 status: build
 	./$(BIN_DIR)/$(APP_NAME) status
+
+startup-on: build
+	./$(BIN_DIR)/$(APP_NAME) startup-on
+
+startup-off: build
+	./$(BIN_DIR)/$(APP_NAME) startup-off
+
+startup-status: build
+	./$(BIN_DIR)/$(APP_NAME) startup-status
 
 build:
 	mkdir -p $(BIN_DIR)

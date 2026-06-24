@@ -43,6 +43,18 @@ func main() {
 		if err := printStatus(); err != nil {
 			log.Fatalf("status error: %v", err)
 		}
+	case "startup-on":
+		if err := enableStartup(); err != nil {
+			log.Fatalf("startup enable error: %v", err)
+		}
+	case "startup-off":
+		if err := disableStartup(); err != nil {
+			log.Fatalf("startup disable error: %v", err)
+		}
+	case "startup-status":
+		if err := printStartupStatus(); err != nil {
+			log.Fatalf("startup status error: %v", err)
+		}
 	default:
 		log.Fatalf("unknown command: %s", command)
 	}
@@ -114,8 +126,12 @@ func startBackground() error {
 		return fmt.Errorf("resolve executable: %w", err)
 	}
 
+	if err := ensureStartupRegistration(executable); err != nil {
+		return fmt.Errorf("ensure startup registration: %w", err)
+	}
+
 	cmd := exec.Command(executable, "serve")
-	cmd.Dir, _ = os.Getwd()
+	cmd.Dir = filepath.Dir(executable)
 	cmd.Stdin = devNull
 	cmd.Stdout = logFile
 	cmd.Stderr = logFile
@@ -156,8 +172,8 @@ func stopBackground() error {
 		return fmt.Errorf("find process: %w", err)
 	}
 
-	if err := process.Signal(syscall.SIGTERM); err != nil {
-		return fmt.Errorf("signal process: %w", err)
+	if err := terminateProcess(process); err != nil {
+		return fmt.Errorf("terminate process: %w", err)
 	}
 
 	_ = os.Remove(pidPath)
@@ -186,12 +202,11 @@ func printStatus() error {
 }
 
 func runtimePaths() (pidPath string, logPath string, err error) {
-	wd, err := os.Getwd()
+	runtimeDir, err := appRuntimeDir()
 	if err != nil {
-		return "", "", fmt.Errorf("get cwd: %w", err)
+		return "", "", err
 	}
 
-	runtimeDir := filepath.Join(wd, "runtime")
 	return filepath.Join(runtimeDir, "smart-card-reader.pid"), filepath.Join(runtimeDir, "smart-card-reader.log"), nil
 }
 
@@ -206,14 +221,49 @@ func existingPID(pidPath string) (bool, int, error) {
 		return false, 0, fmt.Errorf("parse pid file: %w", err)
 	}
 
-	process, err := os.FindProcess(pid)
+	running, err := processRunning(pid)
 	if err != nil {
-		return false, pid, fmt.Errorf("find process: %w", err)
+		return false, pid, err
 	}
 
-	if err := process.Signal(syscall.Signal(0)); err != nil {
-		return false, pid, nil
+	return running, pid, nil
+}
+
+func enableStartup() error {
+	executable, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("resolve executable: %w", err)
 	}
 
-	return true, pid, nil
+	if err := ensureStartupRegistration(executable); err != nil {
+		return err
+	}
+
+	fmt.Println("Startup registration enabled")
+	return nil
+}
+
+func disableStartup() error {
+	if err := removeStartupRegistration(); err != nil {
+		return err
+	}
+
+	fmt.Println("Startup registration disabled")
+	return nil
+}
+
+func printStartupStatus() error {
+	enabled, command, err := startupRegistrationStatus()
+	if err != nil {
+		return err
+	}
+
+	if !enabled {
+		fmt.Println("Startup: disabled")
+		return nil
+	}
+
+	fmt.Println("Startup: enabled")
+	fmt.Printf("Command: %s\n", command)
+	return nil
 }

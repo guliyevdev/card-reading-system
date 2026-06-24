@@ -34,6 +34,20 @@ Logs and PID file are written into `runtime/`.
 
 If you open the built binary by double-clicking it, it will detach and continue running in background. Use `make status` to check it and `make stop` to stop it.
 
+## Windows startup
+
+On Windows, the first successful `start` automatically registers the app under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`. That means after the user logs in again, Windows starts the app automatically.
+
+Manual commands:
+
+```bash
+make startup-on
+make startup-status
+make startup-off
+```
+
+Runtime files are not tied to the current working directory. They are stored in the user's config directory, so reboot and startup launches use the same PID and log location.
+
 ## Build
 
 Native build:
